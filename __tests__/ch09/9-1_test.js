@@ -50,3 +50,19 @@ test("9.1.2 定义捕获器", ()=>{
   expect(Object.create(target).id).toEqual('target')
   expect(Object.create(proxy).id).toEqual('handler override')
 })
+
+test("9.1.3 捕获器参数和反射 API", ()=>{
+  const target = { foo: 'bar' }
+  const handler = {
+    get(trapTarget, property, receiver){
+      return trapTarget[property];
+    }
+  };
+  
+  const proxy = new Proxy(target, handler);
+
+  expect(proxy.foo).toEqual('bar')
+  expect(target.foo).toEqual('bar')
+
+});
+
