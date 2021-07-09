@@ -1,0 +1,15 @@
+{
+  "name": "jsgjbc",
+  "version": "1.0.0",
+  "description": "js 高级编程",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "jest": "^27.0.6"
+  }
+}
