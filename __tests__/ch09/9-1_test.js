@@ -32,5 +32,21 @@ test("9.1.3 创建空代理", ()=>{
 })
 
 test("9.1.2 定义捕获器", ()=>{
+  const target = { id: 'target' };
+  const handler = {
+    get(){
+      return 'handler override';
+    }
+  };
+  const proxy = new Proxy(target, handler);
 
+  expect(target.id).toEqual('target')
+  expect(proxy.id).toEqual('handler override')
+
+  expect(target['id']).toEqual('target')
+  expect(proxy['id']).toEqual('handler override')
+
+
+  expect(Object.create(target).id).toEqual('target')
+  expect(Object.create(proxy).id).toEqual('handler override')
 })
