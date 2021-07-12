@@ -117,3 +117,33 @@ test("9.1.5 可撤销代理", ()=>{
   revoke()
   expect(()=>proxy.foo).toThrow()
 })
+
+describe("9.1.6 实用反射 api", ()=>{
+  test("1. 反射API与对象API", ()=>{
+
+  })
+  test("2. 状态标记", ()=>{
+    const o = {}
+    // before refactor
+    expect(()=> Object.defineProperty(o, 'foo', 'bar')).toThrow()
+
+    expect(() => Reflect.defineProperty(o, 'foo', {value:'bar'})).toBeTruthy()
+  })
+  test("3. 用一等函数代替操作符", ()=>{
+    /* @link https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect */
+  })
+  test("4. 安全的应用函数", ()=>{
+    const fn = function sayHello(){
+      return this.hello
+
+    }
+    foo = { hello: "hi!"}
+    fn.apply = function(){ throw new Error("just a joke")}
+    expect(()=>fn.applyfoo()).toThrow()
+
+    let hiText = Function.prototype.apply.call(fn, foo)
+    expect(hiText).toBe('hi!')
+    hiText = Reflect.apply(fn, foo, [])
+    expect(hiText).toBe('hi!')
+  })
+})
