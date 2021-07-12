@@ -1,5 +1,5 @@
-test("9.1.1 创建空代理", ()=>{
-  const target = { id: 'target' }
+test("9.1.1 创建空代理", () => {
+  const target = {id: 'target'}
   const handler = {}
 
   const proxy = new Proxy(target, handler)
@@ -17,16 +17,16 @@ test("9.1.1 创建空代理", ()=>{
   expect(target.hasOwnProperty('id')).toBeTruthy()
   expect(proxy.hasOwnProperty('id')).toBeTruthy()
 
-  expect(()=> target instanceof Proxy).toThrow(TypeError)
-  expect(()=> proxy instanceof Proxy).toThrow(TypeError)
+  expect(() => target instanceof Proxy).toThrow(TypeError)
+  expect(() => proxy instanceof Proxy).toThrow(TypeError)
 
   expect(target === proxy).not.toBeTruthy()
 })
 
-test("9.1.2 定义捕获器", ()=>{
-  const target = { id: 'target' }
+test("9.1.2 定义捕获器", () => {
+  const target = {id: 'target'}
   const handler = {
-    get(){
+    get() {
       return 'handler override'
     }
   }
@@ -43,11 +43,11 @@ test("9.1.2 定义捕获器", ()=>{
   expect(Object.create(proxy).id).toBe('handler override')
 })
 
-describe("9.1.3 捕获器参数和反射 API", ()=>{
-  test("trap", ()=>{
-    const target = { foo: 'bar' }
+describe("9.1.3 捕获器参数和反射 API", () => {
+  test("trap", () => {
+    const target = {foo: 'bar'}
     const handler = {
-      get(trapTarget, property, receiver){
+      get(trapTarget, property, receiver) {
         return trapTarget[property]
       }
     }
@@ -57,8 +57,8 @@ describe("9.1.3 捕获器参数和反射 API", ()=>{
     expect(target.foo).toBe('bar')
   })
 
-  test("反射", ()=>{
-    const target2 = { foo: 'bar' }
+  test("反射", () => {
+    const target2 = {foo: 'bar'}
     const handler2 = {
       // get(){
       //   return Reflect.get(...arguments)
@@ -70,12 +70,12 @@ describe("9.1.3 捕获器参数和反射 API", ()=>{
     expect(target2.foo).toBe('bar')
   })
 
-  test("mixed", ()=>{
-    const target3 = { foo: 'bar', baz: "qux" }
+  test("mixed", () => {
+    const target3 = {foo: 'bar', baz: "qux"}
     const handler3 = {
-      get(trapTarget, property, receiver){
+      get(trapTarget, property, receiver) {
         let decoration = ''
-        if (property === 'foo'){
+        if (property === 'foo') {
           decoration = '!!!'
         }
         return Reflect.get(...arguments) + decoration
@@ -92,7 +92,7 @@ describe("9.1.3 捕获器参数和反射 API", ()=>{
 
 })
 
-test("9.1.4 捕获器不变式", ()=>{
+test("9.1.4 捕获器不变式", () => {
   const target = {}
   Object.defineProperty(target, 'foo', {
     configurable: false,
@@ -100,50 +100,58 @@ test("9.1.4 捕获器不变式", ()=>{
     value: 'bar'
   })
 
-  const handler = { get(){ return 'qux' } }
+  const handler = {get() {return 'qux'} }
 
   const proxy = new Proxy(target, handler)
-  expect(()=> proxy.foo).toThrow()
+  expect(() => proxy.foo).toThrow()
 })
 
-test("9.1.5 可撤销代理", ()=>{
-  const target = { foo: "bar" }
-  const handler = { get() { return "intercepted" }}
+test("9.1.5 可撤销代理", () => {
+  const target = {foo: "bar"}
+  const handler = {get() {return "intercepted"} }
 
-  const { proxy, revoke } = Proxy.revocable(target, handler)
+  const {proxy, revoke} = Proxy.revocable(target, handler)
   expect(proxy.foo).toBe('intercepted')
   expect(target.foo).toBe('bar')
 
   revoke()
-  expect(()=>proxy.foo).toThrow()
+  expect(() => proxy.foo).toThrow()
 })
 
-describe("9.1.6 实用反射 api", ()=>{
-  test("1. 反射API与对象API", ()=>{
+describe("9.1.6 实用反射 api", () => {
+  test("1. 反射API与对象API", () => {
 
   })
-  test("2. 状态标记", ()=>{
+  test("2. 状态标记", () => {
     const o = {}
     // before refactor
-    expect(()=> Object.defineProperty(o, 'foo', 'bar')).toThrow()
+    expect(() => Object.defineProperty(o, 'foo', 'bar')).toThrow()
 
-    expect(() => Reflect.defineProperty(o, 'foo', {value:'bar'})).toBeTruthy()
+    expect(() => Reflect.defineProperty(o, 'foo', {value: 'bar'})).toBeTruthy()
   })
-  test("3. 用一等函数代替操作符", ()=>{
+  test("3. 用一等函数代替操作符", () => {
     /* @link https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect */
   })
-  test("4. 安全的应用函数", ()=>{
-    const fn = function sayHello(){
+  test("4. 安全的应用函数", () => {
+    const fn = function sayHello() {
       return this.hello
 
     }
-    foo = { hello: "hi!"}
-    fn.apply = function(){ throw new Error("just a joke")}
-    expect(()=>fn.applyfoo()).toThrow()
+    foo = {hello: "hi!"}
+    fn.apply = function () {throw new Error("just a joke")}
+    expect(() => fn.applyfoo()).toThrow()
 
     let hiText = Function.prototype.apply.call(fn, foo)
     expect(hiText).toBe('hi!')
     hiText = Reflect.apply(fn, foo, [])
     expect(hiText).toBe('hi!')
   })
+})
+
+test("9.1.7 代理另一个代理", () => {
+  const target = {foo: 'bar'}
+  const proxy1 = new Proxy(target, {get() {return Reflect.get(...arguments)} })
+  const proxy2 = new Proxy(target, {get() {return Reflect.get(...arguments)} })
+
+  expect(proxy2.foo).toBe('bar')
 })
