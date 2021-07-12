@@ -32,15 +32,15 @@ test("9.1.2 定义捕获器", ()=>{
   }
   const proxy = new Proxy(target, handler)
 
-  expect(target.id).toEqual('target')
-  expect(proxy.id).toEqual('handler override')
+  expect(target.id).toBe('target')
+  expect(proxy.id).toBe('handler override')
 
-  expect(target['id']).toEqual('target')
-  expect(proxy['id']).toEqual('handler override')
+  expect(target['id']).toBe('target')
+  expect(proxy['id']).toBe('handler override')
 
 
-  expect(Object.create(target).id).toEqual('target')
-  expect(Object.create(proxy).id).toEqual('handler override')
+  expect(Object.create(target).id).toBe('target')
+  expect(Object.create(proxy).id).toBe('handler override')
 })
 
 describe("9.1.3 捕获器参数和反射 API", ()=>{
@@ -53,8 +53,8 @@ describe("9.1.3 捕获器参数和反射 API", ()=>{
     }
     const proxy = new Proxy(target, handler)
 
-    expect(proxy.foo).toEqual('bar')
-    expect(target.foo).toEqual('bar')
+    expect(proxy.foo).toBe('bar')
+    expect(target.foo).toBe('bar')
   })
 
   test("反射", ()=>{
@@ -66,8 +66,8 @@ describe("9.1.3 捕获器参数和反射 API", ()=>{
       get: Reflect.get // 和上面的注释等价
     }
     const proxy2 = new Proxy(target2, handler2)
-    expect(proxy2.foo).toEqual('bar')
-    expect(target2.foo).toEqual('bar')
+    expect(proxy2.foo).toBe('bar')
+    expect(target2.foo).toBe('bar')
   })
 
   test("mixed", ()=>{
@@ -83,11 +83,11 @@ describe("9.1.3 捕获器参数和反射 API", ()=>{
     }
     const proxy3 = new Proxy(target3, handler3)
 
-    expect(proxy3.foo).toEqual('bar!!!')
-    expect(target3.foo).toEqual('bar')
+    expect(proxy3.foo).toBe('bar!!!')
+    expect(target3.foo).toBe('bar')
 
-    expect(proxy3.baz).toEqual('qux')
-    expect(target3.baz).toEqual('qux')
+    expect(proxy3.baz).toBe('qux')
+    expect(target3.baz).toBe('qux')
   })
 
 })
@@ -100,17 +100,20 @@ test("9.1.4 捕获器不变式", ()=>{
     value: 'bar'
   })
 
-  const handler = {
-    get(){
-      return 'qux'
-    }
-  }
+  const handler = { get(){ return 'qux' } }
 
   const proxy = new Proxy(target, handler)
+  expect(()=> proxy.foo).toThrow()
+})
 
-  expect.assertions(1)
-  try { proxy.foo } catch(e){
-    expect(e).not.toBeNull()
-  }
+test("9.1.5 可撤销代理", ()=>{
+  const target = { foo: "bar" }
+  const handler = { get() { return "intercepted" }}
 
+  const { proxy, revoke } = Proxy.revocable(target, handler)
+  expect(proxy.foo).toBe('intercepted')
+  expect(target.foo).toBe('bar')
+
+  revoke()
+  expect(()=>proxy.foo).toThrow()
 })
