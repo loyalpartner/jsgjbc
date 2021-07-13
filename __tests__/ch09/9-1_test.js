@@ -155,3 +155,38 @@ test("9.1.7 代理另一个代理", () => {
 
   expect(proxy2.foo).toBe('bar')
 })
+
+describe("9.1.8 代理的问题与不足", () => {
+  test("1. 代理中的 this", function () {
+    const target = {thisValEqualsProxy() {return this === proxy} }
+    const proxy = new Proxy(target, {})
+
+    expect(target.thisValEqualsProxy()).toBeFalsy()
+    expect(proxy.thisValEqualsProxy()).toBeTruthy()
+  })
+
+  test("1.2 weekmap 例子", () => {
+    const wm = new WeakMap()
+    class User {
+      constructor(userId) {wm.set(this, userId)}
+      set id(userId) {wm.set(this, userId)}
+      get id() {return wm.get(this)}
+    }
+
+    const user = new User(123)
+    const userProxy = new Proxy(user, {})
+    expect(userProxy.id).toBeUndefined()
+
+    const UserClassProxy = new Proxy(User, {})
+    const proxyUser = new UserClassProxy(456)
+    expect(proxyUser.id).toBe(456)
+  })
+
+  test("2. 代理与内部槽位", () => {
+    const target = new Date()
+    const proxy = new Proxy(target, {})
+
+    expect(proxy).toBeInstanceOf(Date)
+    expect(() => proxy.getDate()).toThrow(TypeError)
+  })
+})
