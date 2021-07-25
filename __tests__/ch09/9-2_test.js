@@ -210,7 +210,7 @@ describe("9.2 代理捕获器与反射方法", () => {
   })
 
   test("9.2.13 construct", () => {
-    const target = function () { return {} }
+    const target = function () {return {}}
     const proxy = new Proxy(target, {
       construct(target, argumentsList, newTarget) {
         return Reflect.construct(...arguments)
@@ -221,6 +221,5 @@ describe("9.2 代理捕获器与反射方法", () => {
     // Reflect.construct(...arguments)
     expect(proxy()).toBeDefined()
   })
-
 })
 
