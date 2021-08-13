@@ -24,7 +24,7 @@ describe("20.11.1 HTML模版", () => {
 
     let fooElement = document.createElement("div")
     let barTemplate = document.createElement("template")
-    fragment = barTemplate.content
+    let fragment = barTemplate.content
     for (let i = 0; i < 3; i++) {
       fragment.appendChild(document.createElement("p"))
     }

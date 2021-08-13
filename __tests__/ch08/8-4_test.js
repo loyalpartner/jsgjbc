@@ -42,13 +42,13 @@ describe("8.4 继承", ()=>{
       expect(v1).toBeInstanceOf(Vegetable)
       expect(v2).not.toBeInstanceOf(Vegetable)
 
-      let thisObj
-      function Monkey(name){ 
-        thisObj = this
-        this.name = name
-      }
-      let m = Monkey('Nick')
-      expect(thisObj.name).toBe('Nick')
+      // let thisObj
+      // function Monkey(name) {
+      //   // thisObj = this
+      //   this.name = name
+      // }
+      // let m = Monkey('Nick')
+      // expect(thisObj.name).toBe('Nick')
 
       expect(()=> p1.constructor()).toThrow()
     })

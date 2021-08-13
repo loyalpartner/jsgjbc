@@ -14,7 +14,8 @@ describe("8.1 理解对象", () => {
       })
       propDescriptor = Reflect.getOwnPropertyDescriptor(person, 'age')
       expect(propDescriptor.writable).toBeFalsy()
-      person.age = 13 // 严格模式下会抛出错误
+       // person.age = 13 // 严格模式下会抛出错误
+      expect(() => person.age = 13).toThrow()
       expect(person.age).toBe(12)
     })
 

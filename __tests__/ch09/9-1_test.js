@@ -137,7 +137,7 @@ describe("9.1.6 实用反射 api", () => {
       return this.hello
 
     }
-    foo = {hello: "hi!"}
+    let foo = {hello: "hi!"}
     fn.apply = function () {throw new Error("just a joke")}
     expect(() => fn.applyfoo()).toThrow()
 

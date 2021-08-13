@@ -10,11 +10,12 @@
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^26.0.24",
+    "babel-jest": "^27.0.6",
     "jest": "^27.0.6",
-    "jsdom": "^16.6.0"
-  },
-  "dependencies": {
+    "jsdom": "^16.6.0",
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0"
+  },
+  "dependencies": {
   }
 }

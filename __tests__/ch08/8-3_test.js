@@ -48,7 +48,7 @@ describe("8.3 继承", ()=>{
 
       instance = new SubType()
       instance.colors.push('black')
-      instance2 = new SubType()
+      let instance2 = new SubType()
       expect(instance.colors).toBe(instance2.colors)
     })
   })

@@ -59,7 +59,7 @@ describe("9.3 代理模式", () => {
     expect(proxy.onlyNumbersGoHere).toBe(0)
     proxy.onlyNumbersGoHere = 1
     expect(proxy.onlyNumbersGoHere).toBe(1)
-    proxy.onlyNumbersGoHere = '2' // 设置失败
+    expect(()=> proxy.onlyNumbersGoHere = '2').toThrow(TypeError)
     expect(proxy.onlyNumbersGoHere).toBe(1)
   })
 

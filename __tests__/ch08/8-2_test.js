@@ -39,19 +39,20 @@ describe("8.2 创建对象", ()=>{
     })
 
     let Person
-    let thisObj
 
     beforeEach(()=>{
       Person = function(name){
-        thisObj = this
-        this.name = name
-        this.sayName = function(){}
+        if(this){
+          this.name = name
+          this.sayName = function(){}
+        }else{
+          throw new Error("this is undefined")
+        }
       }
     })
 
     test("1. 构造函数也是函数", ()=>{
-      Person('Jack')
-      expect(thisObj.name).toBe('Jack')
+      expect(()=>Person('Jack')).toThrow()
 
       let obj = new Object()
       Person.call(obj, 'jest')

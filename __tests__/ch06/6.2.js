@@ -158,7 +158,7 @@ describe("6.2 Array", () => {
       1: "cyan",
     }
     colors = ['red', 'green', 'blue']
-    colors3 = colors.concat(moreNewColors)
+    let colors3 = colors.concat(moreNewColors)
     expect(colors3).toEqual(['red', 'green', 'blue', 'pink', 'cyan'])
 
     // slice
